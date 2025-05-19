@@ -31,7 +31,7 @@ const ClientDetails = () => {
     if (window.confirm('Are you sure you want to delete this client?')) {
       setIsDeleting(true);
       try {
-        await axios.delete(`http://localhost:5050/api/clients/${id}`);
+        await axios.delete(`${API_BASE_URL}/api/clients/${id}`);
         navigate('/', { state: { success: 'Client deleted successfully!' } });
       } catch (err) {
         setError(err.response?.data?.error || err.message || 'Failed to delete client');

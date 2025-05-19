@@ -1,10 +1,12 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL ;
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
-const AddClient = () => {
+const ClientForm = () => {
+  const { id } = useParams();
+  const isEditMode = Boolean(id);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
@@ -22,6 +24,41 @@ const AddClient = () => {
   });
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(isEditMode);
+
+  useEffect(() => {
+    if (!isEditMode) return;
+
+    const fetchClient = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/api/clients/${id}`);
+        const clientData = response.data;
+        
+        // Convert numerical fields to strings for form inputs
+        const processedData = {
+          ...clientData,
+          phoneNumber: clientData.phoneNumber?.toString() || '',
+          noteNumber: clientData.noteNumber?.toString() || '',
+          size: [{
+            'ወራዲ': clientData.size[0]?.['ወራዲ']?.toString() || '',
+            'ቁመት': clientData.size[0]?.['ቁመት']?.toString() || '',
+            'ማዓንጣ': clientData.size[0]?.['ማዓንጣ']?.toString() || '',
+            'እፍልቢ': clientData.size[0]?.['እፍልቢ']?.toString() || '',
+            'ሞንኮብ': clientData.size[0]?.['ሞንኮብ']?.toString() || '',
+            'ኢድ': clientData.size[0]?.['ኢድ']?.toString() || '',
+          }]
+        };
+
+        setFormData(processedData);
+      } catch (err) {
+        setError(err.response?.data?.error || 'Failed to load client data');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchClient();
+  }, [id, isEditMode]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -41,14 +78,14 @@ const AddClient = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+
     if (!formData.name.trim()) {
       setError('Name is required');
       return;
     }
 
     setIsSubmitting(true);
-    
+
     try {
       const payload = {
         name: formData.name,
@@ -65,14 +102,29 @@ const AddClient = () => {
         whatType: formData.whatType || undefined
       };
 
-      await axios.post(`${API_BASE_URL}/api/clients`, payload);
-      navigate('/', { state: { success: 'Client added successfully!' } });
+      if (isEditMode) {
+        await axios.put(`${API_BASE_URL}/api/clients/${id}`, payload);
+        navigate('/', { state: { success: 'Client updated successfully!' } });
+      } else {
+        await axios.post(`${API_BASE_URL}/api/clients`, payload);
+        navigate('/', { state: { success: 'Client added successfully!' } });
+      }
     } catch (err) {
-      setError(err.response?.data?.error || err.message || 'An error occurred while adding client');
+      setError(err.response?.data?.error || err.message || 'An error occurred');
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-cyan-100 to-emerald-100 p-4 flex items-center justify-center">
+        <div className="text-2xl font-bold text-emerald-800">
+          Loading client data...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-cyan-100 to-emerald-100 p-4">
@@ -88,7 +140,7 @@ const AddClient = () => {
             Back
           </Link>
           <h1 className="text-center text-amber-50 text-3xl p-3 sm:p-5 ml-3 sm:ml-0 pl-8 pr-8 w-fit bg-gradient-to-r from-green-700 to-emerald-400 border-4 border-orange-600 rounded-2xl">
-            Add New Client
+            {isEditMode ? 'Edit Client' : 'Add New Client'}
           </h1>
           <div className="w-24"></div>
         </div>
@@ -188,10 +240,10 @@ const AddClient = () => {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Adding...
+                    {isEditMode ? 'Updating...' : 'Adding...'}
                   </span>
                 ) : (
-                  'Add Client'
+                  isEditMode ? 'Update Client' : 'Add Client'
                 )}
               </button>
             </div>
@@ -202,4 +254,4 @@ const AddClient = () => {
   );
 };
 
-export default AddClient;
+export default ClientForm;
