@@ -7,7 +7,9 @@
 
 A modern client management application built with React, Vite, and Tailwind CSS, deployed on Render.
 
-![App Screenshot](/screenshot.png) <!-- Add your screenshot path here -->
+The Site (https://client-management-app-frontend.onrender.com/)
+
+![App Screenshot](/screenshot.png)
 
 ## ✨ Features
 
@@ -44,7 +46,7 @@ A modern client management application built with React, Vite, and Tailwind CSS,
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/client-management-app.git
+   git clone https://github.com/siramo1/client-management-app.git
    ```
 
 2. Navigate to project directory:

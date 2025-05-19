@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 const API_BASE_URL = import.meta.env.VITE_API_URL ;
 
 function HomePage() {
+
+    document.title = ("client-Managment");
+
     const [clients, setClients] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [isLoading, setIsLoading] = useState(true);

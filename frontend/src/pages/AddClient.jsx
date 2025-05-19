@@ -5,6 +5,8 @@ import axios from 'axios';
 const API_BASE_URL = import.meta.env.VITE_API_URL ;
 
 const AddClient = () => {
+  document.title = ("Add Client");
+
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',

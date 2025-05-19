@@ -5,6 +5,9 @@ import axios from 'axios';
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const ClientForm = () => {
+
+  document.title = ("Edit Client");
+
   const { id } = useParams();
   const isEditMode = Boolean(id);
   const navigate = useNavigate();
