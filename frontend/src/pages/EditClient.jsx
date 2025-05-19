@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL ;
+
 const AddClient = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -63,7 +65,7 @@ const AddClient = () => {
         whatType: formData.whatType || undefined
       };
 
-      await axios.post('http://localhost:5050/api/clients', payload);
+      await axios.post(`${API_BASE_URL}/api/clients`, payload);
       navigate('/', { state: { success: 'Client added successfully!' } });
     } catch (err) {
       setError(err.response?.data?.error || err.message || 'An error occurred while adding client');

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL ;
+
 const ClientDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -13,7 +15,7 @@ const ClientDetails = () => {
   useEffect(() => {
     const fetchClient = async () => {
       try {
-        const response = await axios.get(`http://localhost:5050/api/clients/${id}`);
+        const response = await axios.get(`${API_BASE_URL}/api/clients/${id}`);
         setClient(response.data);
         setLoading(false);
       } catch (err) {

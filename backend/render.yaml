@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: client-management-backend
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: MONGODB_URI
+        value: your_mongodb_connection_string
+      - key: PORT
+        value: 10000
