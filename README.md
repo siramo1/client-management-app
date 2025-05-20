@@ -118,8 +118,4 @@ npm test
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
-## 📬 Contact
-
-Siraj Mohammed - [(@SirajMoham15108](https://x.com/SirajMoham15108?t=pL2XdqwpVI_67EHhiK8fDA&s=35)
-
 Project Link : [https://github.com/siramo1/client-management-app](https://github.com/siramo1/client-management-app)
